@@ -1,7 +1,34 @@
+<?php
+if(!empty($_POST["send"])) {
+	$fname = $_POST["first-name"];
+	$lname = $_POST["last-name"];
+    $email = $_POST["email"];
+	$phone = $_POST["phone"];
+	$content = $_POST["message"];
+
+	$toEmail = "prayogo0399@gmail.com";
+	$mailHeaders = "From: " . $fname . "_". $lname . "<". $email .">\r\n";
+	if(mail($toEmail, $phone, $content, $mailHeaders)) {
+	    $message = "Your contact information is received successfully.";
+	    $type = "success";
+    }
+    
+
+    $conn = mysqli_connect("localhost", "id14360214_pragus", "m_mWq1GIKaF~~X&O", "id14360214_email") or die("Connection Error: " . mysqli_error($conn));
+
+    mysqli_query($conn, "INSERT INTO tblcontact (first_name, last_name, email, phone, content) VALUES ('" . $fname . "', '" . $lname . "', '" . $email . "', '" . $phone . "', '" . $content . "')");
+    $insert_id = mysqli_insert_id($conn);
+
+    if(!empty($insert_id)) {
+    $message = "Your contact information is saved successfully";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Contact V17</title>
+	<title>Contact me</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
@@ -32,9 +59,10 @@
 
 	<div class="container-contact100">
 		<div class="wrap-contact100">
-			<form class="contact100-form validate-form">
+			<form class="contact100-form validate-form" method="post"
+            action="" enctype="multipart/form-data">
 				<span class="contact100-form-title">
-					Send Us A Message
+					Send me A Message
 				</span>
 
 				<label class="label-input100" for="first-name">Tell us your name *</label>
@@ -61,15 +89,21 @@
 
 				<label class="label-input100" for="message">Message *</label>
 				<div class="wrap-input100 validate-input" data-validate = "Message is required">
-					<textarea id="message" class="input100" name="message" placeholder="Write us a message"></textarea>
+					<textarea id="message" class="input100" name="content" placeholder="Write us a message"></textarea>
 					<span class="focus-input100"></span>
 				</div>
 
 				<div class="container-contact100-form-btn">
-					<button class="contact100-form-btn">
+					<button class="contact100-form-btn" name="send">
 						Send Message
 					</button>
 				</div>
+				<div id="statusMessage"> 
+                        <?php if (! empty($message)) { ?>
+                            <p class='<?php echo $type; ?>Message'><?php echo $message; ?></p>
+                        <?php }
+                        ?>
+                    </div>
 			</form>
 
 			<div class="contact100-more flex-col-c-m" style="background-image: url('images/bg-01.jpg');">
@@ -161,6 +195,7 @@
 
 	  gtag('config', 'UA-23581568-13');
 	</script>
+	<script></script>
 	<script>
 		alert("Sorry, website still work-in-progress");
 	</script>
